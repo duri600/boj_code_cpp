@@ -6,8 +6,8 @@ using namespace std;
 
 int N, M;
 int temp;
-int Map[1000][1000];
-int visit[1000][1000][2];
+int Map[1001][1001];
+int visit[1001][1001][2];
 
 typedef pair<int, int> P;
 typedef pair<P, int> status;
@@ -22,6 +22,7 @@ void InputData() {
 		for (int j = 0; j < M; j++)
 		{
 			//cin >> temp;
+			//scanf("%1d", &Map[i][j]);
 			scanf("%1d", &temp);
 			Map[i][j] = temp;
 		}
@@ -35,12 +36,12 @@ int BFS(status s) {
 
 	while (!q.empty())
 	{
-		int x = q.front().first.first;
-		int y = q.front().first.second;
+		int x = q.front().first.second;
+		int y = q.front().first.first;
 		int block = q.front().second;
 		q.pop();
 
-		if (y == N && x == M) {
+		if (y == (N-1) && x == (M-1)) {
 			return visit[y][x][block];
 		}
 
@@ -57,8 +58,8 @@ int BFS(status s) {
 				visit[next_y][next_x][block - 1] = visit[y][x][block] + 1;
 				q.push({ { next_y,next_x }, block - 1 });
 			}
-			
-			if ((Map[next_y][next_x] == 0) && !visit[next_y][next_x][block])
+
+			if ((Map[next_y][next_x] == 0) && (visit[next_y][next_x][block] == 0))
 			{
 				visit[next_y][next_x][block] = visit[y][x][block] + 1;
 				q.push({ {next_y,next_x}, block });
@@ -68,7 +69,7 @@ int BFS(status s) {
 		}
 	}
 	return -1;
-	
+
 }
 
 
