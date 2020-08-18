@@ -1,57 +1,108 @@
 #include <iostream>
-#include <queue>
-#include <vector>
 #include <map>
-#include <algorithm>
+#include <vector>
+#include <queue>
 using namespace std;
 
-int K;
-int V, E;
-int a, b;
-bool visit[20001];
-queue<int> q_a;
-queue<int> q_b;
-map<int, vector<int>> m;
+#define RED 1
+#define BLUE 2
 
+int K, V, E;
+map<int, vector<int>> graph;
+int visit[20001];
 
-int check(queue<int> qu) {
-	while (!qu.empty())
+void bfs(int start)
+{
+	queue<int> q;
+	int color = RED;
+
+	visit[start] = color;
+	q.push(start);
+	while (!q.empty())
 	{
-		int temp = qu.front();
-		qu.pop();
-		for (int i = 1; i <= V; i++)
+		int front = q.front();
+		q.pop();
+
+		if (visit[front] == RED)
 		{
-			if (find(m[temp].begin(),m[temp].end(),i) != m[temp].end())
+			color = BLUE;
+		}
+		else if (visit[front] == BLUE)
+		{
+			color = RED;
+		}
+
+		int map_size = graph[front].size();
+		for (int i = 0; i < map_size; i++)
+		{
+			int next = graph[front][i];
+			if (!visit[next])
 			{
-				return 0;
+				visit[next] = color;
+				q.push(next);
 			}
 		}
 	}
-	return 1;
 }
 
-void permutation(int size, int depth) {
-
+bool check_graph()
+{
+	for (int i = 1; i <= V; i++)
+	{
+		int graph_size = graph[i].size();
+		for (int j = 0; j < graph_size; j++)
+		{
+			int next = graph[i][j];
+			if (visit[i] == visit[next])
+			{
+				return false;
+			}
+		}
+	}
+	return true;
 }
 
-int main(void) {
+void Initialize()
+{
+	for (int i = 0; i <= V; i++)
+	{
+		graph[i].clear();
+		visit[i] = 0;
+	}
+}
+
+int main(void)
+{
 	cin >> K;
 	for (int i = 0; i < K; i++)
 	{
 		cin >> V >> E;
 		for (int j = 0; j < E; j++)
 		{
+			int a, b;
 			cin >> a >> b;
-			m[a].push_back(b);
-			m[b].push_back(a);
+			graph[a].push_back(b);
+			graph[b].push_back(a);
 		}
 
-		for (int aaa = 1; aaa <= V; aaa++)
+		for (int k = 1; k <= V; k++)
 		{
-			permutation(aaa, 0);
+			if (!visit[k])
+			{
+				bfs(k);
+			}
 		}
-		
-	}
 
-	return 0;
+		if (check_graph())
+		{
+			cout << "YES" << endl;
+		}
+		else
+		{
+			cout << "NO" << endl;
+		}
+
+		Initialize();
+
+	}
 }
