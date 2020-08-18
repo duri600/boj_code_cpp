@@ -8,7 +8,7 @@ using namespace std;
 int K;
 int V, E;
 int a, b;
-bool visit[20000];
+bool visit[20001];
 queue<int> q_a;
 queue<int> q_b;
 map<int, vector<int>> m;
@@ -19,7 +19,7 @@ int check(queue<int> qu) {
 	{
 		int temp = qu.front();
 		qu.pop();
-		for (int i = 0; i < V; i++)
+		for (int i = 1; i <= V; i++)
 		{
 			if (find(m[temp].begin(),m[temp].end(),i) != m[temp].end())
 			{
@@ -30,37 +30,8 @@ int check(queue<int> qu) {
 	return 1;
 }
 
-void permutation(int depth) {
-	if (depth == V)
-	{
-		while (!q_a.empty()) q_a.pop();
-		while (!q_b.empty()) q_b.pop();
-		for (int k = 0; k < V; k++)
-		{
-			if (visit[k] == 1)
-			{
-				q_a.push(k);
-			}
-			else
-			{
-				q_b.push(k);
-			}
-		}
-		return;
-	}
-	else if (depth == 0)
-	{
-		visit[0] = 1;
-		permutation(depth + 1);
-	}
-	else
-	{
-		visit[depth] = 1;
-		permutation(depth + 1);
-		visit[depth] = 0;
-		permutation(depth + 1);
+void permutation(int size, int depth) {
 
-	}
 }
 
 int main(void) {
@@ -75,16 +46,11 @@ int main(void) {
 			m[b].push_back(a);
 		}
 
-		permutation(0);
-
-		if (check(q_a) && check(q_b))
+		for (int aaa = 1; aaa <= V; aaa++)
 		{
-			cout << "YES" << endl;
+			permutation(aaa, 0);
 		}
-		else
-		{
-			cout << "NO" << endl;
-		}
+		
 	}
 
 	return 0;
