@@ -2,12 +2,14 @@
 #include <queue>
 #include <map>
 #include <vector>
+#define INF 100000000
 using namespace std;
 
 int V, E;
 int first;
 int start, fin, weight;
 //int map[20010][20010];
+
 queue<int> q;
 typedef pair<int, int> P;
 map<int, vector<P>> graph;
@@ -39,6 +41,10 @@ int main(void)
 	{
 		cin >> start >> fin >> weight;
 		graph[start].push_back({ fin,weight });
+	}
+	for (int i = 1; i <= V; i++)
+	{
+		dist[i] = INF;
 	}
 
 	bfs(first);
